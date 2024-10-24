@@ -18,10 +18,15 @@ function Container(props) {
     const url = `https://fakestoreapi.com/products/${
       props.category ? "category/" + props.category : ""
     }?limit=${limit}`;
+    const url1 = `https://fakestoreapi.com/products/${
+      props.category ? "category/" + props.category : ""
+    }`;
     let data = await fetch(url);
+    let data1 = await fetch(url1);
     let parsedData = await data.json();
+    let parsedData1 = await data1.json();
     setArticles(parsedData);
-    setArticles1(parsedData);
+    setArticles1(parsedData1);
   };
   useEffect(() => {
     updateData();
@@ -73,7 +78,7 @@ function Container(props) {
                   <Containeritems
                     title={element.title ? element.title.slice(0, 18) + "..." : ""}
                     imageUrl={element.image}
-                    description={element.description ? element.description.slice(0, 60) + "..." : ""}
+                    description={element.description ? element.description.slice(0, 50) + "..." : ""}
                     price={element.price ? element.price + "$" : "$"}
                     rating={element.rating.rate ? element.rating.rate : "**"}
                     reviews={element.rating.count ? element.rating.count : "**"}
@@ -117,7 +122,7 @@ function Container(props) {
                   <div className="col-md-4 mb-4" key={e.id}>
                     <Carouselitems
                       title1={e.title ? e.title.slice(0, 20) + "..." : ""}
-                      description1={e.description ? e.description.slice(0, 60) + "..." : ""}
+                      description1={e.description ? e.description.slice(0, 50) + "..." : ""}
                       image1={e.image}
                     ></Carouselitems>
                   </div>

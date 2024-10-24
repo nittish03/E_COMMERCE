@@ -11,12 +11,12 @@ const errorHandler = require("./middlewares/errorMiddleware");
 const authRoutes = require("./routes/authRoutes");
 
 //dotenv
-dotenv.config(); 
+dotenv.config();
 
 //mongo connection
 connectDB();
 
-//rest object 
+//rest object
 const app = express();
 
 //middlewares

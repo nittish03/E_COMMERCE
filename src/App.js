@@ -13,7 +13,6 @@ import Footer from "./components/Footer";
 
 function App() {
   const theme = useMemo(() => createTheme(themeSettings()), []);
-  const apiKey = process.env.REACT_APP_API_KEY;
 
   return (
     <>

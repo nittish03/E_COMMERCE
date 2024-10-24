@@ -6,6 +6,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "server": "nodemon server.js",
     "start": "node server.js",
+    "build": "react-scripts build",
     "client": "npm start --prefix ./news-app",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },

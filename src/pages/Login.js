@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import axios from "axios";
@@ -12,6 +12,7 @@ import {
   Alert,
   Collapse,
 } from "@mui/material";
+const loggedIn = JSON.parse(localStorage.getItem("authToken"));
 
 const Login = () => {
   const theme = useTheme();
@@ -27,16 +28,19 @@ const Login = () => {
 
   //register ctrl
   const handleSubmit = async (e) => {
-    const loading = toast.loading("Logging in...")
 
+    const loading = toast.loading("Logging in")
     e.preventDefault();
     try {
-      await axios.post("https://server-mp3l.onrender.com/api/v1/auth/login", { email, password });
+      await axios.post(`${process.env.REACT_APP_BASE_URL}/api/v1/auth/login`, { email, password });
+      await axios.get(`${process.env.REACT_APP_BASE_URL}/api/v1/auth/login`, { email, password });
       toast.dismiss(loading);
       toast.success("Logged In Successfully");
       localStorage.setItem("authToken", true);
       navigate("/home");
     } catch (err) {
+      toast.dismiss(loading);
+      toast.error("Failed to Login",err);
       console.log(error);
       if (err.response.data.error) {
         setError(err.response.data.error);
@@ -48,6 +52,11 @@ const Login = () => {
       }, 5000);
     }
   };
+  useEffect(() => {
+    if (loggedIn) {
+      navigate("/home");
+    }
+  },[loggedIn]);
   const showP = () => {
     const passwordInput = document.getElementById("password");
     passwordInput.type = document.getElementById("cb").checked ? "text" : "password";

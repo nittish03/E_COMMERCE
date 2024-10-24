@@ -27,14 +27,15 @@ const Register = () => {
   //register ctrl
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const loading = toast.loading("Registering")
     try {
-      const loading = toast.loading("Summarizing...")
-
-      await axios.post("/https://server-mp3l.onrender.com/api/v1/auth/register", { username, email, password });
+      await axios.post(`${process.env.REACT_APP_BASE_URL}/api/v1/auth/register`, { username, email, password });
       toast.dismiss(loading);
-      toast.success("User Register Successfully");
+      toast.success("User Registered Successfully");
       navigate("/login");
     } catch (err) {
+      toast.dismiss(loading);
+      toast.error("Error registering",err)
       console.log(error);
       if (err.response.data.error) {
         setError(err.response.data.error);
@@ -118,7 +119,7 @@ const Register = () => {
           <p className="Ac have-account">
             Already have an account?
           </p>
-          <Link className="fp btn btn-outline btn-success login-btn ms-2" to="/login">
+          <Link className="fp btn btn-outline btn-success login-btn ms-2" to="/">
             Log in
           </Link>
           </div>

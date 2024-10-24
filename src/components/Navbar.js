@@ -1,27 +1,25 @@
 import React from "react";
-import PropTypes from "prop-types";
-import { Box, Typography, useTheme } from "@mui/material";
 
 import sicon from "./sicon.png";
 import { Link,NavLink,useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
-function Navbar(props) {
-  const theme = useTheme();
+function Navbar() {
   const navigate = useNavigate();
   const loggedIn = JSON.parse(localStorage.getItem("authToken"));
 
   //handle logout
   const handleLogout = async () => {
+    const loading = toast.loading("Logging out...");
     try {
-      const loading = toast.loading("Logging out...")
-
+    
       await axios.post("https://server-mp3l.onrender.com/api/v1/auth/logout");
       localStorage.removeItem("authToken");
       toast.dismiss(loading);
       toast.success("Logged Out Successfully ");
       navigate("/");
     } catch (error) {
+      toast.dismiss(loading);
       console.log(error);
     }
   };

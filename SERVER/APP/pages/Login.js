@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import axios from "axios";
@@ -12,35 +12,34 @@ import {
   Alert,
   Collapse,
 } from "@mui/material";
-const loggedIn = JSON.parse(localStorage.getItem("authToken"));
 
 const Login = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   //media
   const isNotMobile = useMediaQuery("(min-width: 1000px)");
-  const loggedIn = JSON.parse(localStorage.getItem("authToken"));
-
   // states
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const username = localStorage.getItem("username");
 
+
+
+  const showP = () => {
+    const passwordInput = document.getElementById("password");
+    passwordInput.type = document.getElementById("cb").checked ? "text" : "password";
+  };
   //register ctrl
   const handleSubmit = async (e) => {
-
-    const loading = toast.loading("Logging in")
+    const loading = toast.loading("Logging in...")
     e.preventDefault();
     try {
-      await axios.post(`${process.env.REACT_APP_BASE_URL}/api/v1/auth/login`, { email, password });
-      toast.dismiss(loading);
-      toast.success(`Logged In as ${username}`);
+      await axios.post("https://server-mp3l.onrender.com/api/v1/auth/login", { email, password });
       localStorage.setItem("authToken", true);
       navigate("/home");
-    } catch (err) {
       toast.dismiss(loading);
-      toast.error("Failed to Login",err);
+      toast.success("Login Successfully");
+    } catch (err) {
       console.log(error);
       if (err.response.data.error) {
         setError(err.response.data.error);
@@ -52,18 +51,7 @@ const Login = () => {
       }, 5000);
     }
   };
-  useEffect(() => {
-    if (loggedIn) {
-      navigate("/home");
-    }
-  },[loggedIn]);
-  const showP = () => {
-    const passwordInput = document.getElementById("password");
-    passwordInput.type = document.getElementById("cb").checked ? "text" : "password";
-  };
-
   return (
-  <>
     <Box
       width={isNotMobile ? "40%" : "80%"}
       p={"2rem"}
@@ -77,9 +65,9 @@ const Login = () => {
           {error}
         </Alert>
       </Collapse>
-      <form onSubmit={handleSubmit} className="log shadow p-4 rounded">
-        <div id="container" className="text-center">
-          <h1 id="h" className="signup-heading  mb-3">Log In</h1>
+      <form onSubmit={handleSubmit}>
+        <Typography variant="h3">Sign In</Typography>
+
         <TextField
           label="email"
           type="email"
@@ -94,8 +82,8 @@ const Login = () => {
         <TextField
           label="password"
           type="password"
-          required
           id="password"
+          required
           margin="normal"
           fullWidth
           value={password}
@@ -103,31 +91,24 @@ const Login = () => {
             setPassword(e.target.value);
           }}
         />
-          <div id="checkbox" className="form-check mb-">
+                  <div id="checkbox" className="form-check mb-">
             <input onClick={showP} id="cb" type="checkbox" className="form-check-input" />
             <label className="form-check-label" htmlFor="cb">Show password</label>
           </div>
-          <Button
+        <Button
           type="submit"
           fullWidth
           variant="contained"
           size="large"
           sx={{ color: "white", mt: 2 }}
         >
-          Log In
+          Sign In
         </Button>
-        <div className="dfc">
-          <p className="Ac have-account  mt-1">
-            Don't have an account?
-          </p>
-          <Link className="fp btn btn-outline btn-success login-btn" to="/register">
-            Sign Up
-          </Link>
-          </div>
-        </div>
+        <Typography mt={2}>
+          Dont have an account ? <Link to="/register">Please Register</Link>
+        </Typography>
       </form>
     </Box>
-  </>
   );
 };
 

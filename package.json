@@ -1,5 +1,5 @@
 {
-  "name": "ai-clone",
+  "name": "e-commerce",
   "version": "0.1.0",
   "proxy": "http://localhost:8080",
   "private": true,

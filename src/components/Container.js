@@ -57,7 +57,6 @@ function Container(props) {
     slidesToShow: 3,
     slidesToScroll: 1,
   };
-  console.log(articles);
 
   return (   
      !loggedIn?

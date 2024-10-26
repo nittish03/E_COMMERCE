@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useEffect,useState} from "react";
 
 import sicon from "./sicon.png";
 import { Link,NavLink,useNavigate } from "react-router-dom";
@@ -7,6 +7,30 @@ import toast from "react-hot-toast";
 function Navbar() {
   const navigate = useNavigate();
   const loggedIn = JSON.parse(localStorage.getItem("authToken"));
+
+
+
+  const [username,setUsername]= useState("");
+  const email = (localStorage.getItem("email"));
+  const params = {
+    email:email
+  }
+  const getUsers= async()=>{
+    const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/v1/auth/`,{params:params});
+    setUsername(response.data.username);
+    localStorage.setItem("username",username);
+  };
+
+  useEffect(()=>{
+getUsers();
+  },[username,email,loggedIn])
+
+
+
+
+
+
+
 
   //handle logout
   const handleLogout = async () => {
@@ -110,7 +134,7 @@ function Navbar() {
           {loggedIn?
           <>
                     <Link type="button" to="/" onClick={handleLogout} className="btn custom-login-btn ms-2">
-            Log Out
+            Log Out, {username}
           </Link>
           </>
           :
